@@ -1,0 +1,31 @@
+productName,sku,warehouseStock,B2B_Orders,Retail_Store_NY,Retail_Store_LA,Website_Direct,Wholesale_Distributor
+Ergonomic Office Chair,CHR-01,500,50,20,30,100,200
+Standing Desk Oak,DSK-OAK,15,10,2,2,5,0
+Wireless Keyboard,KB-W,0,50,10,10,100,50
+Generic Mousepad,,10000,500,200,200,1000,5000
+Floppy Disk 1.44MB,FD-144,200,0,0,0,0,0
+USB-C Multiport Hub,HUB-01,150,50,25,25,50,0
+Noise Cancelling Headphones,AUD-NC1,42,20,10,10,15,0
+Monitor Arm Mount,MNT-ARM,800,200,50,50,150,300
+LED Desk Lamp,LMP-LED,15,0,5,5,10,0
+Mechanical Switch Tester,SW-TST,4,0,0,0,5,0
+Bluetooth Speaker Waterproof,SPK-WP,120,0,40,40,50,0
+Webcam 4K Pro,CAM-4K,0,100,20,20,50,100
+Laptop Cooling Pad,COOL-PAD,300,50,25,25,100,100
+Cable Management Kit,CBL-MGT,2500,500,100,150,800,1000
+Surge Protector Power Strip,PWR-STR,85,50,10,10,20,0
+Ergonomic Footrest,FT-RST,12,5,2,2,5,0
+Whiteboard 36x48,,50,20,5,5,10,15
+Dry Erase Markers (12-Pack),MKR-12,8000,2000,500,500,1000,4000
+Filing Cabinet 3-Drawer,CAB-3D,3,2,1,1,0,0
+Mesh Office Chair,CHR-MSH,450,100,50,50,150,100
+Smart Thermostat,SMRT-THR,0,25,10,10,30,0
+Security Camera Indoor,SEC-CAM,110,20,30,30,40,0
+Network Switch 8-Port,NET-SW8,60,30,5,5,20,0
+Ethernet Cable 50ft,ETH-50,1200,400,100,100,300,300
+Uninterruptible Power Supply (UPS),UPS-1000,18,10,2,2,5,0
+Standing Desk Converter,DSK-CNV,4,0,2,2,1,0
+Privacy Screen Filter 24-inch,PRIV-24,300,150,20,20,60,50
+Stylus Pen Universal,PEN-UNI,0,50,20,20,100,0
+Tablet Stand Adjustable,TAB-STD,85,20,15,15,40,0
+Over-Ear Studio Headphones,AUD-STU,22,10,5,5,5,0
