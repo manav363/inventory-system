@@ -1,4 +1,4 @@
-import { useInventoryContext } from '../context/InventoryContext';
+import useInventoryContext from '../context/useInventoryContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, AlertTriangle, Package, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';

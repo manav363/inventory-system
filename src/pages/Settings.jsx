@@ -1,29 +1,48 @@
-import { useState, useEffect } from 'react';
-import { Store, Bell, Trash2, ShieldAlert, Activity, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { useInventoryContext } from '../context/InventoryContext';
+import { useRef, useState } from 'react';
+import { Store, Bell, Trash2, Activity, CheckCircle2, AlertTriangle } from 'lucide-react';
+import useInventoryContext from '../context/useInventoryContext';
 import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
-  const { setRawInventory, setIsLoaded, channels, channelToggles, toggleChannel } = useInventoryContext();
+  const {
+    availableColumns,
+    channelToggles,
+    channels,
+    clearData,
+    fieldMappings,
+    numericColumns,
+    setFieldMapping,
+    toggleChannel,
+  } = useInventoryContext();
   const navigate = useNavigate();
+  const saveFeedbackTimeoutRef = useRef(null);
 
   // State for the Alert Slider
   const [alertThreshold, setAlertThreshold] = useState(5);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
 
-  // Micro-interaction: Show a brief "Saved" checkmark when the slider stops moving
-  useEffect(() => {
+  const triggerSaveFeedback = () => {
     setShowSaveConfirm(true);
-    const timer = setTimeout(() => setShowSaveConfirm(false), 2000);
-    return () => clearTimeout(timer);
-  }, [alertThreshold]);
+    window.clearTimeout(saveFeedbackTimeoutRef.current);
+    saveFeedbackTimeoutRef.current = window.setTimeout(() => {
+      setShowSaveConfirm(false);
+    }, 2000);
+  };
 
   const handleClearData = () => {
     if (window.confirm("CRITICAL WARNING: Are you sure you want to clear all inventory data? This cannot be undone.")) {
-      setRawInventory([]);
-      setIsLoaded(false);
+      clearData();
       navigate('/');
     }
+  };
+
+  const handleThresholdChange = (value) => {
+    setAlertThreshold(value);
+    triggerSaveFeedback();
+  };
+
+  const handleFieldMappingChange = (field, value) => {
+    setFieldMapping(field, value);
   };
 
   // Helper function to make channel names pretty (e.g., "Retail_Store_NY" -> "Retail Store NY")
@@ -40,6 +59,67 @@ const Settings = () => {
         </header>
 
         <div className="space-y-10">
+
+          <section>
+            <div className="mb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Store className="text-slate-700" size={20} />
+                Sheet Mapping
+              </h2>
+              <p className="text-sm text-slate-500">
+                These options are generated from the uploaded Excel sheet. Remap them any time if we guessed wrong.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label className="block">
+                <span className="text-sm font-bold text-slate-700 block mb-2">Item name column</span>
+                <select
+                  value={fieldMappings.productName ?? ''}
+                  onChange={(event) => handleFieldMappingChange('productName', event.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {availableColumns.map((column) => (
+                    <option key={column.key} value={column.key}>
+                      {column.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-bold text-slate-700 block mb-2">SKU / secondary label</span>
+                <select
+                  value={fieldMappings.sku ?? ''}
+                  onChange={(event) => handleFieldMappingChange('sku', event.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">None</option>
+                  {availableColumns.map((column) => (
+                    <option key={column.key} value={column.key}>
+                      {column.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-bold text-slate-700 block mb-2">Stock column</span>
+                <select
+                  value={fieldMappings.warehouseStock ?? ''}
+                  onChange={(event) => handleFieldMappingChange('warehouseStock', event.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">None</option>
+                  {numericColumns.map((column) => (
+                    <option key={column} value={column}>
+                      {column}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </section>
           
           {/* SECTION 1: INTEGRATIONS GRID */}
           <section>
@@ -111,7 +191,7 @@ const Settings = () => {
                                 min="0" 
                                 max="50" 
                                 value={alertThreshold}
-                                onChange={(e) => setAlertThreshold(e.target.value)}
+                                onChange={(e) => handleThresholdChange(e.target.value)}
                                 className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                             />
                             <span className="text-xs font-bold text-slate-400">50</span>
@@ -123,7 +203,7 @@ const Settings = () => {
                             <input 
                                 type="number" 
                                 value={alertThreshold}
-                                onChange={(e) => setAlertThreshold(e.target.value)}
+                                onChange={(e) => handleThresholdChange(e.target.value)}
                                 className="w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-black text-xl text-center text-slate-800 transition-all"
                             />
                             {/* Saved Feedback Checkmark */}

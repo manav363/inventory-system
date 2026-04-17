@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UploadCloud, Hexagon, Info } from 'lucide-react';
-import { useInventoryContext } from '../context/InventoryContext';
+import useInventoryContext from '../context/useInventoryContext';
 
 const UploadScreen = () => {
   const { processFile } = useInventoryContext();
@@ -91,17 +91,14 @@ const UploadScreen = () => {
             <span className="text-sm font-bold">Required Data Schema</span>
           </div>
           <p className="text-xs text-slate-500 mb-4 font-medium leading-relaxed">
-            Ensure your file includes the exact column headers below to prevent rendering errors:
+            We will inspect your uploaded sheet, detect its columns, and build the settings options from that file automatically.
           </p>
           <div className="flex flex-wrap gap-2">
-            {['productName', 'sku', 'warehouseStock'].map(col => (
+            {['Name-like column', 'Stock-like column', 'Numeric demand columns'].map(col => (
               <span key={col} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 text-xs rounded-lg font-mono font-medium shadow-sm">
                 {col}
               </span>
             ))}
-            <span className="px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-700 text-xs rounded-lg font-mono font-bold shadow-sm">
-              + Any Order Sources
-            </span>
           </div>
         </div>
 

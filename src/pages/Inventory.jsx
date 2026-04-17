@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
-import { useInventoryContext } from '../context/InventoryContext';
+import useInventoryContext from '../context/useInventoryContext';
 import { Save, AlertTriangle, CheckCircle, Search, SlidersHorizontal, PackageX, TrendingUp } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 function Inventory() {
-  const { inventory, updateStock } = useInventoryContext(); 
+  const { exportRows, fieldMappings, inventory, updateStock } = useInventoryContext(); 
   
   // NEW: UI State for Search and Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,8 +15,7 @@ function Inventory() {
   };
 
   const handleExport = () => {
-    const dataToExport = inventory.map(({ totalOrders, ...rest }) => rest);
-    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const ws = XLSX.utils.json_to_sheet(exportRows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Inventory_Export");
     XLSX.writeFile(wb, "SyncPulse_Inventory.xlsx");
@@ -102,7 +101,9 @@ function Inventory() {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">Product Info</th>
-                  <th className="px-6 py-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">Warehouse Stock</th>
+                  <th className="px-6 py-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                    {fieldMappings.warehouseStock ?? 'Stock Column'}
+                  </th>
                   <th className="px-6 py-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">Total Demand</th>
                   <th className="px-6 py-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">Status</th>
                 </tr>
@@ -137,8 +138,9 @@ function Inventory() {
                             type="number" 
                             value={item.warehouseStock}
                             onChange={(e) => handleStockChange(item.id, e.target.value)}
+                            disabled={!fieldMappings.warehouseStock}
                             // Cleaner input: looks like text until focused, then acts like an input
-                            className="w-full px-3 py-2 bg-slate-100 border border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-slate-800 transition-all hover:bg-slate-200"
+                            className="w-full px-3 py-2 bg-slate-100 border border-transparent rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold text-slate-800 transition-all hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
                             />
                         </div>
                         </td>

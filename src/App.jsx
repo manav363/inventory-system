@@ -4,7 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Inventory from './pages/Inventory';
 import Settings from './pages/Settings';
 import UploadScreen from './components/UploadScreen';
-import { InventoryProvider, useInventoryContext } from './context/InventoryContext';
+import { InventoryProvider } from './context/InventoryContext';
+import useInventoryContext from './context/useInventoryContext';
 
 const MainLayout = () => {
   const { isLoaded } = useInventoryContext();
