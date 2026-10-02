@@ -1,15 +1,17 @@
-import { LayoutDashboard, Package, Settings, LogOut, Hexagon, UserCircle } from 'lucide-react';
+import { LayoutDashboard, Package, Settings, LogOut, Hexagon, FileSpreadsheet } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import useInventoryContext from '../context/useInventoryContext';
 
 const Sidebar = () => {
+  const { fileName, inventory } = useInventoryContext();
   const navItems = [
     { icon: LayoutDashboard, label: 'Overview', path: '/' },
     { icon: Package, label: 'Inventory', path: '/inventory' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 
-  const handleLogout = () => {
-    // In a real app, this would clear authentication tokens
+  // There is no account: closing the workspace discards the in-memory data and returns to upload.
+  const handleCloseWorkspace = () => {
     window.location.reload();
   };
 
@@ -62,22 +64,22 @@ const Sidebar = () => {
       {/* WORKSPACE / USER INFO */}
       <div className="p-4 border-t border-slate-100">
         
-        {/* Fake User Profile to ground the UI in reality */}
+        {/* The file the workspace was built from */}
         <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-slate-50 border border-slate-100">
-            <UserCircle size={24} className="text-slate-400" />
+            <FileSpreadsheet size={24} className="text-slate-400 shrink-0" />
             <div className="overflow-hidden">
-                <p className="text-sm font-bold text-slate-900 truncate">Warehouse Admin</p>
-                <p className="text-xs font-medium text-slate-500 truncate">Pro Workspace</p>
+                <p className="text-sm font-bold text-slate-900 truncate" title={fileName}>{fileName || 'No file loaded'}</p>
+                <p className="text-xs font-medium text-slate-500 truncate">{inventory.length.toLocaleString()} rows</p>
             </div>
         </div>
 
         <button 
-          onClick={handleLogout} 
+          onClick={handleCloseWorkspace} 
           className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 hover:shadow-sm rounded-xl w-full font-bold transition-all group cursor-pointer"
         >
           {/* Micro-interaction: The icon slides left slightly on hover */}
           <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Sign Out</span>
+          <span>Close workspace</span>
         </button>
       </div>
     </div>
