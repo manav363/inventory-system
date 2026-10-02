@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { Store, Bell, Trash2, Activity, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Store, Trash2, Activity, AlertTriangle } from 'lucide-react';
 import useInventoryContext from '../context/useInventoryContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,30 +14,12 @@ const Settings = () => {
     toggleChannel,
   } = useInventoryContext();
   const navigate = useNavigate();
-  const saveFeedbackTimeoutRef = useRef(null);
-
-  // State for the Alert Slider
-  const [alertThreshold, setAlertThreshold] = useState(5);
-  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
-
-  const triggerSaveFeedback = () => {
-    setShowSaveConfirm(true);
-    window.clearTimeout(saveFeedbackTimeoutRef.current);
-    saveFeedbackTimeoutRef.current = window.setTimeout(() => {
-      setShowSaveConfirm(false);
-    }, 2000);
-  };
 
   const handleClearData = () => {
     if (window.confirm("CRITICAL WARNING: Are you sure you want to clear all inventory data? This cannot be undone.")) {
       clearData();
       navigate('/');
     }
-  };
-
-  const handleThresholdChange = (value) => {
-    setAlertThreshold(value);
-    triggerSaveFeedback();
   };
 
   const handleFieldMappingChange = (field, value) => {
@@ -169,57 +150,7 @@ const Settings = () => {
             )}
           </section>
 
-          {/* SECTION 2: GLOBAL PREFERENCES */}
-          <section>
-            <div className="mb-4">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Bell className="text-orange-500" size={20} />
-                Notification Thresholds
-              </h2>
-              <p className="text-sm text-slate-500">Configure when the system should warn you about low stock.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <div className="max-w-2xl flex flex-col md:flex-row md:items-center gap-8">
-                    <div className="flex-1">
-                        <label className="text-sm font-bold text-slate-700 block mb-3">Global Low Stock Warning</label>
-                        <div className="flex items-center gap-4">
-                            <span className="text-xs font-bold text-slate-400">0</span>
-                            {/* Visual Range Slider */}
-                            <input 
-                                type="range" 
-                                min="0" 
-                                max="50" 
-                                value={alertThreshold}
-                                onChange={(e) => handleThresholdChange(e.target.value)}
-                                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                            />
-                            <span className="text-xs font-bold text-slate-400">50</span>
-                        </div>
-                    </div>
-                    
-                    <div className="flex flex-col items-center justify-center min-w-[120px]">
-                        <div className="relative">
-                            <input 
-                                type="number" 
-                                value={alertThreshold}
-                                onChange={(e) => handleThresholdChange(e.target.value)}
-                                className="w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-black text-xl text-center text-slate-800 transition-all"
-                            />
-                            {/* Saved Feedback Checkmark */}
-                            {showSaveConfirm && (
-                                <div className="absolute -top-2 -right-2 bg-emerald-500 text-white rounded-full p-0.5 shadow-sm animate-bounce">
-                                    <CheckCircle2 size={14} />
-                                </div>
-                            )}
-                        </div>
-                        <span className="text-xs text-slate-400 font-medium mt-2">Units remaining</span>
-                    </div>
-                </div>
-            </div>
-          </section>
-
-          {/* SECTION 3: DANGER ZONE */}
+          {/* SECTION 2: DANGER ZONE */}
           <section>
             <div className="mb-4">
               <h2 className="text-lg font-bold text-red-600 flex items-center gap-2">
